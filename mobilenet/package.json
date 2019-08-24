@@ -17,14 +17,14 @@
     "@tensorflow/tfjs-converter": "~1.2.1"
   },
   "devDependencies": {
-    "@tensorflow/tfjs-core": "~1.2.1",
     "@tensorflow/tfjs-converter": "~1.2.1",
+    "@tensorflow/tfjs-core": "~1.2.1",
     "@types/jasmine": "~2.5.53",
     "babel-core": "^6.26.0",
     "babel-plugin-transform-runtime": "~6.23.0",
     "jasmine": "~3.1.0",
     "jasmine-core": "~3.1.0",
-    "rimraf": "~2.6.2",
+    "rimraf": "^2.6.3",
     "rollup": "~0.58.2",
     "rollup-plugin-node-resolve": "~3.3.0",
     "rollup-plugin-typescript2": "~0.13.0",
@@ -34,10 +34,14 @@
     "typescript": "3.3.3333"
   },
   "scripts": {
-    "build": "rimraf dist && tsc",
-    "publish-local": "yarn build && rollup -c && yalc push",    
+    "build": "rimraf dist && tsc && uglifyjs dist/index.js -c -m -o dist/mobilenet.min.js",
+    "publish-local": "yarn build && rollup -c && yalc push",
     "lint": "tslint -p . -t verbose",
     "test": "ts-node run_tests.ts"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@tensorflow/tfjs": "^1.2.8",
+    "tfjs": "^0.6.0"
+  }
 }
