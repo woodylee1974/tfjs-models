@@ -34,7 +34,8 @@
     "typescript": "3.3.3333"
   },
   "scripts": {
-    "build": "rimraf dist && tsc && uglifyjs dist/index.js -c -m -o dist/mobilenet.min.js",
+    "dist": "rimraf dist && tsc && rollup -c && cp dist/mobilenet.min.js ../../tfapi",
+    "build": "rimraf dist && tsc && rollup -c && cp dist/mobilenet.js ../../tfapi",
     "publish-local": "yarn build && rollup -c && yalc push",
     "lint": "tslint -p . -t verbose",
     "test": "ts-node run_tests.ts"

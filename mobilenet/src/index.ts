@@ -18,7 +18,7 @@
 import * as tfconv from '@tensorflow/tfjs-converter';
 import * as tf from '@tensorflow/tfjs-core';
 
-import {IMAGENET_CLASSES} from './imagenet_classes';
+// import {IMAGENET_CLASSES} from './imagenet_classes';
 
 const IMAGE_SIZE = 224;
 
@@ -79,7 +79,7 @@ const MODEL_INFO: {[version: string]: {[alpha: string]: MobileNetInfo}} = {
     },
     '1.00': {
       url:
-          'https://tfhub.dev/google/imagenet/mobilenet_v1_100_224/classification/1',
+          'tfapi/1',
       inputRange: [0, 1]
     }
   },
@@ -136,6 +136,7 @@ export async function load(modelConfig: ModelConfig = {
   if (modelConfig.inputRange != null) {
     [inputMin, inputMax] = modelConfig.inputRange;
   }
+  console.log(modelConfig.modelUrl);
   const mobilenet = new MobileNetImpl(
       versionStr, alphaStr, modelConfig.modelUrl, inputMin, inputMax);
   await mobilenet.load();
@@ -148,10 +149,10 @@ export interface MobileNet {
       img: tf.Tensor|ImageData|HTMLImageElement|HTMLCanvasElement|
       HTMLVideoElement,
       embedding?: boolean): tf.Tensor;
-  classify(
-      img: tf.Tensor3D|ImageData|HTMLImageElement|HTMLCanvasElement|
-      HTMLVideoElement,
-      topk?: number): Promise<Array<{className: string, probability: number}>>;
+  // classify(
+  //     img: tf.Tensor3D|ImageData|HTMLImageElement|HTMLCanvasElement|
+  //     HTMLVideoElement,
+  //     topk?: number): Promise<Array<{className: string, probability: number}>>;
 }
 
 class MobileNetImpl implements MobileNet {
@@ -246,46 +247,46 @@ class MobileNetImpl implements MobileNet {
    * video, or canvas.
    * @param topk How many top values to use. Defaults to 3.
    */
-  async classify(
-      img: tf.Tensor3D|ImageData|HTMLImageElement|HTMLCanvasElement|
-      HTMLVideoElement,
-      topk = 3): Promise<Array<{className: string, probability: number}>> {
-    const logits = this.infer(img) as tf.Tensor2D;
+  // async classify(
+  //     img: tf.Tensor3D|ImageData|HTMLImageElement|HTMLCanvasElement|
+  //     HTMLVideoElement,
+  //     topk = 3): Promise<Array<{className: string, probability: number}>> {
+  //   const logits = this.infer(img) as tf.Tensor2D;
 
-    const classes = await getTopKClasses(logits, topk);
+  //   const classes = await getTopKClasses(logits, topk);
 
-    logits.dispose();
+  //   logits.dispose();
 
-    return classes;
-  }
+  //   return classes;
+  // }
 }
 
-async function getTopKClasses(logits: tf.Tensor2D, topK: number):
-    Promise<Array<{className: string, probability: number}>> {
-  const softmax = logits.softmax();
-  const values = await softmax.data();
-  softmax.dispose();
+// async function getTopKClasses(logits: tf.Tensor2D, topK: number):
+//     Promise<Array<{className: string, probability: number}>> {
+//   const softmax = logits.softmax();
+//   const values = await softmax.data();
+//   softmax.dispose();
 
-  const valuesAndIndices = [];
-  for (let i = 0; i < values.length; i++) {
-    valuesAndIndices.push({value: values[i], index: i});
-  }
-  valuesAndIndices.sort((a, b) => {
-    return b.value - a.value;
-  });
-  const topkValues = new Float32Array(topK);
-  const topkIndices = new Int32Array(topK);
-  for (let i = 0; i < topK; i++) {
-    topkValues[i] = valuesAndIndices[i].value;
-    topkIndices[i] = valuesAndIndices[i].index;
-  }
+//   const valuesAndIndices = [];
+//   for (let i = 0; i < values.length; i++) {
+//     valuesAndIndices.push({value: values[i], index: i});
+//   }
+//   valuesAndIndices.sort((a, b) => {
+//     return b.value - a.value;
+//   });
+//   const topkValues = new Float32Array(topK);
+//   const topkIndices = new Int32Array(topK);
+//   for (let i = 0; i < topK; i++) {
+//     topkValues[i] = valuesAndIndices[i].value;
+//     topkIndices[i] = valuesAndIndices[i].index;
+//   }
 
-  const topClassesAndProbs = [];
-  for (let i = 0; i < topkIndices.length; i++) {
-    topClassesAndProbs.push({
-      className: IMAGENET_CLASSES[topkIndices[i]],
-      probability: topkValues[i]
-    });
-  }
-  return topClassesAndProbs;
-}
+//   const topClassesAndProbs = [];
+//   for (let i = 0; i < topkIndices.length; i++) {
+//     topClassesAndProbs.push({
+//       className: IMAGENET_CLASSES[topkIndices[i]],
+//       probability: topkValues[i]
+//     });
+//   }
+//   return topClassesAndProbs;
+// }
