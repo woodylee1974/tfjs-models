@@ -79,7 +79,7 @@ const MODEL_INFO: {[version: string]: {[alpha: string]: MobileNetInfo}} = {
     },
     '1.00': {
       url:
-          'tfapi/1',
+          'data',
       inputRange: [0, 1]
     }
   },

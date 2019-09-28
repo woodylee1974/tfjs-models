@@ -126,8 +126,8 @@ export class BrowserFftSpeechCommandRecognizer implements
       //     `${this.MODEL_URL_PREFIX}/${this.vocabulary}/model.json`;
       // this.metadataOrURL =
       //     `${this.MODEL_URL_PREFIX}/${this.vocabulary}/metadata.json`;
-      this.modelArtifactsOrURL = "https://127.0.0.1:5000/tfapi/browser_fft/model.json";
-      this.metadataOrURL = "https://127.0.0.1:5000/tfapi/browser_fft/metadata.json";
+      this.modelArtifactsOrURL = `${window.location.protocol}//${window.location.host}/audioprint/data/model.json`;
+      this.metadataOrURL = `${window.location.protocol}//${window.location.host}/audioprint/data/metadata.json`;
     } else {
       tf.util.assert(
           vocabulary == null,
